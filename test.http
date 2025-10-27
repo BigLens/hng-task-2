@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:3000
+
+### 1. Refresh Countries - Fetch and cache all countries
+POST {{baseUrl}}/countries/refresh
+
+### 2. Get All Countries
+GET {{baseUrl}}/countries
+
+### 3. Get Countries - Filter by Region
+GET {{baseUrl}}/countries?region=Africa
+
+### 4. Get Countries - Filter by Currency
+GET {{baseUrl}}/countries?currency=NGN
+
+### 5. Get Countries - Sort by GDP (Descending)
+GET {{baseUrl}}/countries?sort=gdp_desc
+
+### 6. Get Countries - Sort by GDP (Ascending)
+GET {{baseUrl}}/countries?sort=gdp_asc
+
+### 7. Get Countries - Sort by Population (Descending)
+GET {{baseUrl}}/countries?sort=population_desc
+
+### 8. Get Countries - Sort by Name (Ascending)
+GET {{baseUrl}}/countries?sort=name_asc
+
+### 9. Get Countries - Combined Filters
+GET {{baseUrl}}/countries?region=Africa&sort=gdp_desc
+
+### 10. Get Single Country by Name
+GET {{baseUrl}}/countries/Nigeria
+
+### 11. Get Another Country
+GET {{baseUrl}}/countries/Ghana
+
+### 12. Get Status
+GET {{baseUrl}}/countries/status
+
+### 13. Get Summary Image
+GET {{baseUrl}}/countries/image
+
+### 14. Delete a Country
+DELETE {{baseUrl}}/countries/Nigeria
+
+### 15. Try to Get Deleted Country (Should return 404)
+GET {{baseUrl}}/countries/Nigeria
