@@ -1,15 +1,15 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Delete, 
-  Param, 
-  Query, 
-  Res, 
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  Query,
+  Res,
   HttpStatus,
   NotFoundException,
   ValidationPipe,
-  UsePipes
+  UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CountriesService } from './countries.service';
@@ -29,6 +29,11 @@ export class CountriesController {
     return await this.countriesService.refreshCountries();
   }
 
+  @Get('status')
+  async getStatus() {
+    return await this.countriesService.getStatus();
+  }
+
   @Get('image')
   async getImage(@Res() res: Response) {
     const imagePath = this.imageGenerationService.getImagePath();
@@ -42,20 +47,15 @@ export class CountriesController {
     return res.sendFile(imagePath);
   }
 
-  @Get('status')
-  async getStatus() {
-    return await this.countriesService.getStatus();
+  @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async findAll(@Query() query: QueryCountriesDto) {
+    return await this.countriesService.findAll(query);
   }
 
   @Get(':name')
   async findOne(@Param('name') name: string) {
     return await this.countriesService.findOne(name);
-  }
-
-  @Get()
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async findAll(@Query() query: QueryCountriesDto) {
-    return await this.countriesService.findAll(query);
   }
 
   @Delete(':name')

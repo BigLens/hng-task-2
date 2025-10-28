@@ -14,11 +14,27 @@ import { CountriesModule } from './countries/countries.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql' as const,
-        host: (configService.get<string>('MYSQLHOST') || configService.get<string>('DB_HOST') || 'localhost'),
-        port: parseInt(configService.get<string>('MYSQLPORT') || configService.get<string>('DB_PORT') || '3306'),
-        username: (configService.get<string>('MYSQLUSER') || configService.get<string>('DB_USERNAME') || 'root'),
-        password: (configService.get<string>('MYSQLPASSWORD') || configService.get<string>('DB_PASSWORD') || ''),
-        database: (configService.get<string>('MYSQLDATABASE') || configService.get<string>('DB_DATABASE') || 'countries_api'),
+        host:
+          configService.get<string>('MYSQLHOST') ||
+          configService.get<string>('DB_HOST') ||
+          'localhost',
+        port: parseInt(
+          configService.get<string>('MYSQLPORT') ||
+            configService.get<string>('DB_PORT') ||
+            '3306',
+        ),
+        username:
+          configService.get<string>('MYSQLUSER') ||
+          configService.get<string>('DB_USERNAME') ||
+          'root',
+        password:
+          configService.get<string>('MYSQLPASSWORD') ||
+          configService.get<string>('DB_PASSWORD') ||
+          '',
+        database:
+          configService.get<string>('MYSQLDATABASE') ||
+          configService.get<string>('DB_DATABASE') ||
+          'countries_api',
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
         migrations: [__dirname + '/migrations/**/*{.ts,.js}'],

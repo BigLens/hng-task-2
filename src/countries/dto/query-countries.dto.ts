@@ -10,6 +10,16 @@ export class QueryCountriesDto {
   currency?: string;
 
   @IsOptional()
-  @IsIn(['gdp_asc', 'gdp_desc', 'population_asc', 'population_desc', 'name_asc', 'name_desc'])
+  @IsIn([
+    'gdp',
+    'gdp_asc',
+    'gdp_desc',
+    'population',
+    'population_asc',
+    'population_desc',
+    'name',
+    'name_asc',
+    'name_desc',
+  ])
   sort?: string;
 }

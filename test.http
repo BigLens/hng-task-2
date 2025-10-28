@@ -34,7 +34,7 @@ GET {{baseUrl}}/countries/Nigeria
 GET {{baseUrl}}/countries/Ghana
 
 ### 12. Get Status
-GET {{baseUrl}}/countries/status
+GET {{baseUrl}}/status
 
 ### 13. Get Summary Image
 GET {{baseUrl}}/countries/image

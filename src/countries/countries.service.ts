@@ -24,9 +24,10 @@ export class CountriesService {
     let savedCount = 0;
 
     for (const countryData of countriesData) {
-      const currencyCode = countryData.currencies && countryData.currencies.length > 0
-        ? countryData.currencies[0].code
-        : null;
+      const currencyCode =
+        countryData.currencies && countryData.currencies.length > 0
+          ? countryData.currencies[0].code
+          : null;
 
       let exchangeRate = null;
       let estimatedGdp = null;
@@ -34,7 +35,8 @@ export class CountriesService {
       if (currencyCode && exchangeRates[currencyCode]) {
         exchangeRate = exchangeRates[currencyCode];
         const randomMultiplier = Math.random() * (2000 - 1000) + 1000;
-        estimatedGdp = (countryData.population * randomMultiplier) / exchangeRate;
+        estimatedGdp =
+          (countryData.population * randomMultiplier) / exchangeRate;
       } else if (currencyCode) {
         exchangeRate = null;
         estimatedGdp = null;
@@ -77,23 +79,51 @@ export class CountriesService {
     const queryBuilder = this.countryRepository.createQueryBuilder('country');
 
     if (query.region) {
-      queryBuilder.andWhere('LOWER(country.region) = LOWER(:region)', { region: query.region });
+      queryBuilder.andWhere('LOWER(country.region) = LOWER(:region)', {
+        region: query.region,
+      });
     }
 
     if (query.currency) {
-      queryBuilder.andWhere('LOWER(country.currency_code) = LOWER(:currency)', { currency: query.currency });
+      queryBuilder.andWhere('LOWER(country.currency_code) = LOWER(:currency)', {
+        currency: query.currency,
+      });
     }
 
     if (query.sort) {
-      const [field, direction] = query.sort.split('_');
-      const order = direction.toUpperCase() as 'ASC' | 'DESC';
-      
+      // Handle sorting with defaults
+      let field: string;
+      let direction: 'ASC' | 'DESC';
+
+      if (query.sort === 'gdp' || query.sort === 'gdp_desc') {
+        field = 'gdp';
+        direction = 'DESC'; // Default to descending
+      } else if (query.sort === 'gdp_asc') {
+        field = 'gdp';
+        direction = 'ASC';
+      } else if (
+        query.sort === 'population' ||
+        query.sort === 'population_desc'
+      ) {
+        field = 'population';
+        direction = 'DESC';
+      } else if (query.sort === 'population_asc') {
+        field = 'population';
+        direction = 'ASC';
+      } else if (query.sort === 'name' || query.sort === 'name_asc') {
+        field = 'name';
+        direction = 'ASC';
+      } else if (query.sort === 'name_desc') {
+        field = 'name';
+        direction = 'DESC';
+      }
+
       if (field === 'gdp') {
-        queryBuilder.orderBy('country.estimated_gdp', order);
+        queryBuilder.orderBy('country.estimated_gdp', direction);
       } else if (field === 'population') {
-        queryBuilder.orderBy('country.population', order);
+        queryBuilder.orderBy('country.population', direction);
       } else if (field === 'name') {
-        queryBuilder.orderBy('country.name', order);
+        queryBuilder.orderBy('country.name', direction);
       }
     }
 
@@ -118,7 +148,10 @@ export class CountriesService {
     return { message: 'Country deleted successfully' };
   }
 
-  async getStatus(): Promise<{ total_countries: number; last_refreshed_at: Date | null }> {
+  async getStatus(): Promise<{
+    total_countries: number;
+    last_refreshed_at: Date | null;
+  }> {
     const totalCountries = await this.countryRepository.count();
     const lastRefreshed = await this.countryRepository
       .createQueryBuilder('country')

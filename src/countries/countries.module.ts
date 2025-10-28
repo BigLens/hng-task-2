@@ -8,11 +8,9 @@ import { ExternalApiService } from './services/external-api.service';
 import { ImageGenerationService } from './services/image-generation.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Country]),
-    HttpModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Country]), HttpModule],
   controllers: [CountriesController],
   providers: [CountriesService, ExternalApiService, ImageGenerationService],
+  exports: [CountriesService], // Export service so AppController can use it
 })
 export class CountriesModule {}
